@@ -161,3 +161,23 @@ android {
 使用`Intent#setPackage`可以限制接收方的包名。在TargetSDK>=26时，也只有设定了Package的Broadcast才能被静态BroadcastReceiver捕获。
 
 # LocalBroadcastManager
+使用`LocalBroadcastManager`可以实现只在进程内发送广播。其内部实现是一个Handler。  
+注意：回调仍然是在UI线程。
+
+## 监听
+```java
+IntentFilter intentFilter = new IntentFilter(BuildConfig.BROADCAST_ACTION);
+mBroadcastReceiver = new LocalBroadcastReceiver();
+LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, intentFilter);
+```
+
+## 取消监听
+``` java
+LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+```
+
+## 发送
+```java
+Intent intent = new Intent(BuildConfig.BROADCAST_ACTION);
+LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+```
