@@ -140,3 +140,7 @@ protected void onCreate(Bundle savedInstanceState) {
 ```
  另外，可以在开发者选项中打开`Don't keep activities`选项，进行上述情况的模拟。
 ![Don't keep activities](./developer_options.png)
+
+## StateLoss
+如果在`onSaveInstanceState()`之后执行`commit()`操作，会抛出异常。  
+应该尽量避免在异步线程回调时进行Fragment事务。或者使用`commitAllowingStateLoss()`。
