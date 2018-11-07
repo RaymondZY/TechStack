@@ -101,5 +101,18 @@ handlerThread.quit();
 handlerThread.quitSafely();
 ```
 
+# 内存泄露
+使用`Handler`和`Runnable`进行异步操作的过程中，如果使用匿名内部类或者非静态内部类实现很容易造成`Activity`的内存泄漏，进而泄露整个视图树。
 
+## Looper
+如果没有调用`Looper#quit()`或者`HandlerThread#quit()`，即使`Activity`销毁了，`Looper`仍在内存中。  
+所以如果一个异步操作持续比较长的时间，`Looper`的`MessageQueue`中会一直持有这个操作对应的`Message`。
 
+## Runnable
+`Runnble`对象被`Message#callback`持有。
+
+## Handler
+`Handler`对象被`Message#target`持有。
+
+## 泄露
+无论是匿名内部类还是非静态内部类都会持有外部`Activity`的引用，导致泄露。
