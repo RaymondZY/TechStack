@@ -38,4 +38,26 @@
   
     ![](E:\Document\Personal\Tech Stack\Android\Draw\images\Shader_LinearGradient_Example.png)
 
-* 
+* BitmapGradient
+
+  图片作为色彩空间，可以设置x方向和y方向的平铺模式。
+
+  ![BitmapShader](./images/Shader_BitmapShader.png)
+
+  * 构造函数
+
+    ```java
+    public BitmapShader(@NonNull Bitmap bitmap, @NonNull TileMode tileX, @NonNull TileMode tileY) {
+        this(bitmap, tileX.nativeInt, tileY.nativeInt);
+    }
+    ```
+
+    * bitmap：使用的图片
+    * tileX：X方向平铺模式
+    * tileY：Y方向平铺模式
+
+  * 使用例子：
+
+    刮奖效果。
+
+    ![](./images/Shader_BitmapShader_Example.png)

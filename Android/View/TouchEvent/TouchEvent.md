@@ -118,7 +118,7 @@ Reference
   			result = true;
   		
   		
-          // . 回调OnTouchListener接口
+          // 1. 回调OnTouchListener接口
   		ListenerInfo li = mListenerInfo;
   		if (li != null && li.mOnTouchListener != null
   				&& (mViewFlags & ENABLED_MASK) == ENABLED
