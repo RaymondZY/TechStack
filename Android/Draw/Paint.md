@@ -38,6 +38,34 @@
   
     ![](E:\Document\Personal\Tech Stack\Android\Draw\images\Shader_LinearGradient_Example.png)
 
+  
+  
+* RadialGradient
+
+  圆形放射状颜色空间。
+
+  * 构造函数：
+
+    ```java
+  public RadialGradient(float centerX, float centerY, float radius,
+                @ColorLong long centerColor, @ColorLong long edgeColor, @NonNull TileMode tileMode) {
+        this(centerX, centerY, radius, new long[] {centerColor, edgeColor}, null, tileMode);
+    }
+    ```
+  
+  * centerX：圆心x坐标
+    * centerY：圆心y坐标
+    * radius：半径
+    * centerColor：中心颜色
+  * edgeColor：边缘颜色
+    * tileMode：平铺模式
+
+  * 使用例子：
+
+    ![](./images/Shader_RadialGradient_Example.png)
+  
+  
+  
 * BitmapGradient
 
   图片作为色彩空间，可以设置x方向和y方向的平铺模式。
