@@ -33,15 +33,15 @@
         android:state_pressed="true">
         <objectAnimator
             android:duration="@android:integer/config_shortAnimTime"
-            android:propertyName="cardElevation"
-            android:valueTo="40dp"
+            android:propertyName="translationZ"
+            android:valueTo="10dp"
             android:valueType="floatType" />
     </item>
     <item>
         <objectAnimator
             android:duration="@android:integer/config_shortAnimTime"
-            android:propertyName="cardElevation"
-            android:valueTo="4dp"
+            android:propertyName="translationZ"
+            android:valueTo="0dp"
             android:valueType="floatType" />
     </item>
 </selector>
