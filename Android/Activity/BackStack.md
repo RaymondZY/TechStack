@@ -120,7 +120,7 @@ startActivity(intent);
 
 * FLAG_ACTIVITY_NEW_TASK
 
-  和SingleTask的逻辑相同，新建的Activity会新启用一个Task。同样地，如果有
+  和SingleTask的逻辑相同，新建的Activity会新启用一个Task。同样地，如果有一个Task包含这个Activity，会回调`Activity.onNewIntent()`。
 
   
 
@@ -156,7 +156,7 @@ startActivity(intent);
 
 * alwaysRetainTaskState
 
-  如果在Root Activity上设置这个属性为true，即使过了很长时间，Task中Activity也会回收。
+  如果在Root Activity上设置这个属性为true，即使过了很长时间，Task中Activity也不会回收。
 
 * clearTaskOnLaunch
 
@@ -182,4 +182,3 @@ adb shell dumpsys activity activities
 
 * [Understand Tasks and Back Stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
 * [Android Activity Launch Mode](https://android.jlelse.eu/android-activity-launch-mode-e0df1aa72242)
-

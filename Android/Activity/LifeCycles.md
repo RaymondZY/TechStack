@@ -153,7 +153,7 @@ onCreateDialog()
 
   这两个方法用于保存视图的临时状态，一般不用于保存复杂的数据。
 
-  ![](E:/Document/Personal/Tech Stack/Android/~Activity/images/options_for_preserving_ui_state.png)
+  ![](./images/options_for_preserving_ui_state.png)
 
   需要注意的是，两个方法都需要调用super的方法，以完成整个视图树的保存和重建。方法最终会回调到`View.onSaveInstanceState()`和`View.onRestoreInstanceState()`，系统View已经替我们实现好了状态的恢复。
 
@@ -182,4 +182,3 @@ onCreateDialog()
   * `onRestoreInstanceState()`
 
     `onRestoreInstanceState()`发生在`onStart()`之后。
-
