@@ -125,7 +125,7 @@ new Thread(() -> {
 
 ![](./images/background_service_limitation.png)
 
-在运行了一段时间后（大约1分钟），这个后台服务已经被系统停止，回调了`onDestory()`。如果再调用`startService()`请求一个后台线程，会抛出`IllegalStateException`。
+在运行了一段时间后（大约1分钟），这个后台服务已经被系统停止，回调了`onDestory()`。如果再调用`startService()`请求一个后台服务，会抛出`IllegalStateException`。
 
 在`SDK 26(Android O)`之后，可以使用`JobIntentService`来进行处理。
 
