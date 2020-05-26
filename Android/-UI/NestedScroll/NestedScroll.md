@@ -288,6 +288,43 @@
 
 
 
+## NestedScrollContainer
+
+第二种方案的实现思路是：让所有子View继承`NestedScrollingChild`接口，让`NestedScrollContainer`实现`NestedScrollingParent`接口。配合使用这两个接口完成滑动事件的分发处理。
+
+### 接口实现
+
+一般我们需要在`NestedScrollContainer`内部使用`RecyclerView`或者`WebView`进行嵌套滑动。
+
+`RecyclerView`已经默认实现了`NestedScrollingChild`接口，无需额外的操作。
+
+`WebView`默认没有实现`NestedScrollingChild`接口，如果需要使用`WebView`，我们需要额外处理Touch事件。
+
+### 分发拖动偏移量
+
+分发拖动偏移量的时机是在`NestedScrollContainer.onNestedPreScroll()`方法中。在这个方法中可以根据子View的情况将事件自己消费，或者交给子View处理。
+
+```java
+@Override
+public void onNestedPreScroll(@NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
+    if (dy > 0) {
+        scrollDown(dy);
+    } else {
+        scrollUp(dy);
+    }
+}
+```
+
+具体的处理方式类与第一种实现方式的类似。
+
+需要注意的是，无需在特殊处理`onNestedPreFling()`和`onNestedFling()`方法。因为`RecyclerView`内部最终会将Fling事件转化为Scroll回调给`NestedScrollContainer`。
+
+### 总结
+
+这一种实现方式较第一种更为复杂，尤其是在需要使用`WebView`作为子View的情况下，需要额外处理Touch事件的分发。
+
+
+
 ## NestedScrollingParent和NestedScrollingChild接口
 
 这两个接口是官方提供的接口，需要配套使用，其目的是用于解决父容器与子View嵌套滑动的问题。
@@ -375,8 +412,6 @@ mLastTouchY = y - mScrollOffset[1];
 
 使用mNestedOffset整体记录嵌套滑动带来的窗口偏移，并且在接收到事件时，追加上这个偏移量。
 
-
-
 ### NestedScrollingParent
 
 接口包含方法如下：
@@ -427,19 +462,6 @@ public interface NestedScrollingParent {
 
 
 
-## NestedScrollContainer
+## NestedScrollView的问题
 
-第二种方案的实现：
-
-```java
-@Override
-public void onNestedPreScroll(@NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
-    if (dy > 0) {
-        scrollDown(dy);
-    } else {
-        scrollUp(dy);
-    }
-}
-```
-
-在`onNestedPreScroll()`中类似第一种方案进行事件的分发。
+不推荐使用`NestedScrollView`和`RecyclerView`进行嵌套使用，虽然嵌套滑动事件可以正确处理，但是这会导致`RecyclerView`的高度被处理成所有Item全部展示的高度，进而导致所有Item都被渲染，因此严重的性能问题。
