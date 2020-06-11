@@ -1,4 +1,0 @@
-# CoordinatorLayout
-
-## AppBarLayout
-
