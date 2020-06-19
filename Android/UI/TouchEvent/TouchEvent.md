@@ -1,19 +1,12 @@
-Reference
+# TouchEvent
 
-* [Manage touch events in a ViewGroup - Android Developers](https://developer.android.com/training/gestures/viewgroup)
-* [Android的Touch事件分发机制简单探析](https://www.cnblogs.com/net168/p/4165970.html)
-* [View—事件分发](https://www.jianshu.com/p/006a12da8dac)
-
-
-
-# 1. 原理
-## 1.1 MotionEvent
+## MotionEvent
 
 用户的点击事件被封装到`MotionEvent`对象中。
 
 
 
-## 1.2 事件发起的入口
+## 事件发起的入口
 
 1. 调用`Activity.dispatchTouchEvent`
 
@@ -59,7 +52,7 @@ Reference
 
 
 
-## 1.3 事件分发的设计理念
+## 事件分发的设计理念
 
 * 记忆能力
 
@@ -75,7 +68,7 @@ Reference
 
 
 
-## 1.4 核心方法
+## 核心方法
 
 * `View.dispatchTouchEvent()`
 
@@ -796,15 +789,13 @@ Reference
 
 
 
-# 2. 实例
+## 实例
 
-## 2.1 Situation 1
+### Situation 1
 
 除了HomeView，没有子View可以响应事件。
 
 这种情况下，因为记忆功能，后续事件将不再转发给子View。
-
-
 
 * 返回值
 
@@ -813,8 +804,6 @@ Reference
   | HomeView  |       false        |         false         |     true     |
   | Container |       false        |         false         |    false     |
   | TextView  |       false        |         false         |    false     |
-
-  
 
 * Logcat输出
 
@@ -842,23 +831,17 @@ Reference
   I/HomeView: dispatchTouchEvent() ACTION_UP returned: true
   ```
 
-  
-
 * 流程图
 
   ![](images/touch_event_situation_1.png)
 
-
-
-## 2.2 situation 2
+### situation 2
 
 HomeView和Container有消费事件的能力。
 
 Down事件会先被Container消费。
 
 由于记忆功能，后续的事件全部会直接传递给Container消费，将不再传递给TextView。
-
-
 
 * 返回值
 
@@ -868,8 +851,6 @@ Down事件会先被Container消费。
 | HomeView  |       false        |         false         |     true     |
 | Container |       false        |         false         |     true     |
 | TextView  |       false        |          N/A          |    false     |
-
-  
 
 * Logcat输出
 
@@ -899,23 +880,17 @@ I/Container: dispatchTouchEvent() ACTION_UP returned: true
 I/HomeView: dispatchTouchEvent() ACTION_UP returned: true
 ```
 
-
-
 * 流程图
 
   ![](images/touch_event_situation_2.png)
 
-
-
-# Situation 3
+### Situation 3
 
 HomeView，Container和TextView有消费事件的能力。
 
 Down事件会先被Text消费。
 
 由于记忆功能，后续的事件全部会直接传递给TextView消费。
-
-
 
 * 返回值
 
@@ -925,8 +900,6 @@ Down事件会先被Text消费。
 | HomeView  |       false        |         false         |     true     |
 | Container |       false        |         false         |     true     |
 | TextView  |       false        |          N/A          |     true     |
-
-  
 
 * Logcat输出
 
@@ -958,23 +931,17 @@ I/Container: dispatchTouchEvent() ACTION_UP returned: true
 I/HomeView: dispatchTouchEvent() ACTION_UP returned: true
 ```
 
-
-
 * 流程图
 
   ![](images/touch_event_situation_3.png)
 
-
-
-# Situation 4
+### Situation 4
 
 HomeView，Container和TextView有消费事件的能力。
 
 但由于Container会拦截事件，Down事件会先被Conatainer消费，并不会传递到TextView。
 
 由于记忆功能，后续的事件全部会直接传递给Container消费，并且不会再调用到Container的onInterceptTouchEvent进行判断。
-
-
 
 * 返回值
 
@@ -984,8 +951,6 @@ HomeView，Container和TextView有消费事件的能力。
 | HomeView  |       false        |         false         |     true     |
 | Container |       false        |         true          |     true     |
 | TextView  |       false        |          N/A          |     true     |
-
-  
 
 * Logcat输出
 
@@ -1011,9 +976,15 @@ I/Container: dispatchTouchEvent() ACTION_UP returned: true
 I/HomeView: dispatchTouchEvent() ACTION_UP returned: true
 ```
 
-
-
 * 流程图
 
   ![](images/touch_event_situation_4.png)
+
+
+
+## Reference
+
+* [Manage touch events in a ViewGroup - Android Developers](https://developer.android.com/training/gestures/viewgroup)
+* [Android的Touch事件分发机制简单探析](https://www.cnblogs.com/net168/p/4165970.html)
+* [View—事件分发](https://www.jianshu.com/p/006a12da8dac)
 
