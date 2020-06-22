@@ -2,6 +2,8 @@
 
 ## 加载大图
 
+### 按照分辨率进行缩放
+
 ```java
 //1.获取手机的分辨率  获取windowmanager 实例
 WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -32,7 +34,13 @@ options.inJustDecodeBounds = false;
 Bitmap bitmap = BitmapFactory.decodeFile("/mnt/sdcard/dog.jpg",options);
 ```
 
+### 分区域显示
+
+图片的分块加载在地图绘制的情况上最为明显，当想获取一张尺寸很大的图片的某一小块区域时，就用到了图片的分块加载，`BitmapRegionDecoder`类的功能就是加载一张图片的指定区域。
 
 
 
+## 图片的三级缓存
+
+### 内存缓存
 
