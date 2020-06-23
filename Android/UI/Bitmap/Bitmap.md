@@ -44,3 +44,40 @@ Bitmap bitmap = BitmapFactory.decodeFile("/mnt/sdcard/dog.jpg",options);
 
 ### 内存缓存
 
+使用`LRUCache`类进行内存的缓存。
+
+`LRUCache`类内部使用的是`LinkedHashMap`作为存储结构，`LinkedHashMap`内部使用的是`HashMap`加上链表来维护最后使用的记录。
+
+`LRUCache`内部操作通过`synchronized`关键字加锁，它是线程安全的。
+
+保存`Bitmap`时，需要注意几点：
+
+* 构造`LRUCache`时，传入最大占用内存的大小。
+* 重写`LRUCache.sizeOf()`方法，返回`Bitmap`占用内存的大小。
+* 重写`LRUCache.entryRemoved()`方法，进行必要的回收。
+
+```java
+mLruCache = new LruCache<String, Bitmap>(4 * 1024 * 1024) {
+
+    @Override
+    protected int sizeOf(String key, Bitmap bitmap) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            return bitmap.getAllocationByteCount();
+        } else {
+            return bitmap.getByteCount();
+        }
+    }
+
+    @Override
+    protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
+        Log.d("DEBUG", "ImageLoader.entryRemoved() " + key);
+    }
+};
+```
+
+### 磁盘缓存
+
+使用`DiskLRUCache`三方库。
+
+### 从网络获取图片
+
