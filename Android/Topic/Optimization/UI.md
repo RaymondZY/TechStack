@@ -31,8 +31,19 @@
 
 ## XML标签优化
 
-### include
+* `<include>`
+* `<merge>`
+* `<ViewStub>`
 
-### merge
 
-### ViewStub
+
+## ListView优化
+
+* 使用`ViewHolder`和`Tag`。
+
+
+
+## RecyclerView优化
+
+* 避免重复在`onBindViewHolder()`方法中新建变量。
+* 图片的加载在`RecyclerView`滑动停止时在进行。
