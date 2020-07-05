@@ -23,3 +23,28 @@
 
 ## 类加载
 
+### 双亲委派机制
+
+`ClassLoader.loadClass()`调用父级`ClassLoder.loadClass()`尝试从父级类加载器进行加载。如果父级加载不了，再调用自己的`ClassLoader.findClass()`方法进行加载。
+
+### 流程
+
+* 加载
+
+  通过`ClassLoader`从文件或者流中获取Class文件，加载到方法区中。
+
+* 校验
+
+  校验Class文件的合法性。
+
+* 准备
+
+  静态变量和静态代码块的准备阶段。
+
+* 解析
+
+* 初始化
+
+* 使用
+
+* 卸载
