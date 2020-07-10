@@ -360,9 +360,9 @@ new Thread(() -> {
 
 ## 与Activity通信
 
-可以使用`LocalIntentManager`通过广播的方式与Activity进行通信。
+可以使用`LocalBroadcastManager`通过广播的方式与Activity进行通信。
 
-`LocalIntentManager`内部使用的是一个运行在主线程的`Handler`进行消息分发。
+`LocalBroadcastManager`内部使用的是一个运行在主线程的`Handler`进行消息分发。
 
 
 
