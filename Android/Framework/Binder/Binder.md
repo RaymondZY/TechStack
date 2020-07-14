@@ -89,6 +89,40 @@ Binder机制中减少了一次数据拷贝是通过内存映射实现的。内�
 
 当Client请求Server进程时，获得到的Binder对象并不是Server进程中的对象，对象无法跨进程传输。Client端拿到的是一个代理类，它具备Server端承诺的功能，实现了相应的接口。当Client端代理Binder对象方法被调用时，实际上是通过Binder通信调用Server端的Binder对象，最后将结果返回。
 
+### 大小限制
+
+在frameworks/native/libs/binder/processState.cpp类中定义了大小：
+
+```c++
+#define BINDER_VM_SIZE ((1*1024*1024) - (4096 *2))
+```
+
+所有线程公用一起公用1M-8K。
+
+### 线程数量
+
+在ProcessSate.cpp在构造函数里，会调用open_driver函数，里面会进行线程池默认大小的设置：
+
+```c++
+static int open_driver()
+{
+    int fd = open("/dev/binder", O_RDWR);
+    if (fd >= 0) {
+        // ...
+        size_t maxThreads = 15;
+        result = ioctl(fd, BINDER_SET_MAX_THREADS, &maxThreads);
+        if (result == -1) {
+            ALOGE("Binder ioctl to set max threads failed: %s", strerror(errno));
+        }
+    } else {
+        ALOGW("Opening '/dev/binder' failed: %s\n", strerror(errno));
+    }
+    return fd;
+}
+```
+
+默认15个。
+
 
 
 ## AIDL
