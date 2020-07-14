@@ -37,7 +37,7 @@
 ### 创建方式
 
 * 传入Runnable
-* 传入Callable
+* 传入Future
 * 继承Thread重写run方法
 
 
@@ -50,9 +50,9 @@ Java内置锁，非公平。可以作用于实例方法，静态方法，代码�
 
 原理是进入锁的对象上的Monitor阻塞队列。
 
-* 偏向锁：当前线程不释放锁对象，可以反复重入
+* 偏向锁：markword中记录偏向的线程，这个线程可以可以反复重入
 * 轻量锁：使用CAS自旋获取，会消耗CPU
-* 重量锁：
+* 重量锁：阻塞
 
 ### volatile
 
@@ -143,7 +143,7 @@ public class Lock{
 
 ### CyclicBarrier
 
-* 
+* `CyclicBarrier.wait()`
 
 ### Semaphore
 

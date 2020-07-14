@@ -22,6 +22,8 @@ public AsyncTask(@Nullable Looper callbackLooper) {
             Result result = null;
             try {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+                
+                // doInBackground
                 result = doInBackground(mParams);
                 Binder.flushPendingCommands();
             } catch (Throwable tr) {
@@ -222,9 +224,17 @@ protected void onPreExecute() {
 }
 ```
 
+### doInBackground()
+
+重写方法，在异步线程回调。
+
+```java
+protected abstract Result doInBackground(Params... params);
+```
+
 ### publishProgress()
 
-在`Runnable`中调用，发布进度状态。最后会回调到主线程。
+在`doInBackground()`中调用，发布进度状态。最后会回调到主线程。
 
 ```java
 protected final void publishProgress(Progress... values) {
