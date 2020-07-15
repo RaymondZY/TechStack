@@ -84,7 +84,9 @@ mBitmapHeight = mOriginalHeight * (scale = opts.inTargetDensity / opts.inDensity
 
 ## 内存存放位置
 
-
+* Android版本<3.0，像素数据分配在native堆，需要手动调用`recycle()`方法进行回收，难以操作。
+* 3.0<=Android版本<8.0，像素分配在java堆，不用手动调用`recycle()`，Bitmap也能自动通过垃圾回收机制进行回收。并且还有`BitmapFinalizer`保证同时回收Native内存。
+* 8.0<=Android版本，像素分配在native堆，减少了OOM的可能。
 
 
 
