@@ -91,7 +91,7 @@ Binder机制中减少了一次数据拷贝是通过内存映射实现的。内�
 
 ### 大小限制
 
-在frameworks/native/libs/binder/processState.cpp类中定义了大小：
+在frameworks/native/libs/binder/ProcessState.cpp类中定义了大小：
 
 ```c++
 #define BINDER_VM_SIZE ((1*1024*1024) - (4096 *2))
@@ -140,3 +140,7 @@ static int open_driver()
 * [图文详解 Android Binder跨进程通信的原理](https://www.jianshu.com/p/4ee3fd07da14)
 * [操作系统：图文详解 内存映射](https://www.jianshu.com/p/719fc4758813)
 * [写给 Android 应用工程师的 Binder 原理剖析](https://juejin.im/post/5acccf845188255c3201100f)
+
+* [binder驱动-------之内存映射篇](https://blog.csdn.net/xiaojsj111/article/details/31422175?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase)
+
+* [Binder驱动之内存映射全解](https://blog.csdn.net/zhanshenwu/article/details/106458188?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase)
