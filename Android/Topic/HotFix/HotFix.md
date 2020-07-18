@@ -187,3 +187,51 @@ public class A {
 
 ## Robust
 
+参考的InstantRun方案，在项目编译Transform阶段使用Gradle Plugin自定义Transform。使用Javassist在类上增加一个静态变量，并且在所有方法上增加静态变量的判断，如果静态变量不为空，使用Patch的方法。
+
+在运行阶段，解析Patch，使用`BaseDexClassLoader`加载插件，并且使用反射替换要修复类的静态变量。
+
+### 优点
+
+* 成功率高
+
+### 缺点
+
+* 无法新增类，方法。
+* 开发不透明。
+
+
+
+## 选型
+
+除了不能即时生效，Tinker在各个方法都比较优秀，尤其是可以支持新增类、方法和修复so及资源。
+
+
+
+##  资源修复
+
+### InstantRun方案
+
+创建一个新的`AssetsManager`，通过反射调用`addAssetsPath()`添加补丁APK。把系统中Resources用到的`AssetsManager`全部进行替换。
+
+缺点是补丁包资源必须是全量资源。
+
+### Diff方案
+
+构造一个增量的资源文件包，添加到原始的`AssetsManager`后面。
+
+![](./images/HotFix_Resources_Diff.png)
+
+* 红色的为修改。
+* 黑色为原始id发生了偏移。
+* 黑色的叉为删除。
+
+这个方案还需要额外处理资源id偏移的问题。要做一个类似于aapt打包资源的工作。
+
+### 低版本问题
+
+在Android Kitkat以下的版本，`addAssetPath()`方法并不会直接触发资源的加载。只有在第一次调用`AssetManager::getResTable()`方法时，才会进行资源加载。
+
+解决方案是：
+
+通过`AssetManager.destory()`进行资源的释放，然后再调用`AssetManager.init()`创建一个新的native实例，再进行`AssetManager.addAssetPath()`方法添加补丁文件，触发重新加载。
