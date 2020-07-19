@@ -75,11 +75,11 @@ public class PluginHostActivity extends AppCompatActivity {
 
 
 
-## 占位式
+## 占位
 
 ### 简述
 
-利用一个占位的`Activity`来代理插件`Activity`的所有方法。
+在`AndroidManifest`中，利用一个占位的`Activity`来实际进行启动和接收声明周期回调，并转发给插件`Activity`。
 
 ### 优点
 
@@ -91,40 +91,60 @@ public class PluginHostActivity extends AppCompatActivity {
 
 
 
-## Hook式
+## Hook
 
 ### 简述
 
 利用反射或者动态代理的方式Hook系统源码，让插件`Activity`拥有运行`Context`，像宿主中的`Activity`一样正常启动。
 
-### 优点
-
-插件`Activity`能像宿主`Activity`一样运行，解决了`Context`的问题。
-
-### 缺点
-
-系统侵入性强。Hook系统源码会随着系统版本升级源码结构变化而失效，必须要重新进行适配。并且随着版本升高，越来越多的系统API被放到了隐藏API黑名单被禁止反射调用，失效的可能性越来越高。
-
-另一个缺点就是，插件Dex需要添加到宿主的`PathList`中，随着插件增多，宿主的会合并越来越多的插件Dex，带来性能问题。
-
 ### Hook点
 
 * `Instrumentation.execStartActivity()`：利用动态代理，代理`IActivityTaskService`，将`Intent`替换成占位的`Activity`，绕过`AMS`的`AndroidManifest.xml`注册检测。
+* 另一种方式是创建一个自定义的`Instrumentation`，在`execStartActivity`时，进行`Intent`的替换，在`newActvitiy`时，进行`Intent`的还原。再反射修改`ActivityThread`中的`Instrumentation`。
 * `ActivityThread.mH`：利用反射，添加自定义的`Handler.Callback`到`ActivityThread.H`，在处理`handleLaunchActivity`的`message`时，将`Intent`还原。
 
 
 
-## LoadedApk
+## VirtualAPK
 
-### 简述
+滴滴出品。
 
-在Hook方式上的升级版本，主要为了解决宿主`PathList`合并插件Dex的问题。通过创建插件自己的`LoadedApk`，并在启动`Activity`时进行宿主和插件的切换，达到不需要合并`PathList`的目的。
+### Activity
 
-### 优点
+通过在`AndroidManifest`中添加占坑的Activity，并且在`startActivity()`方法时进行Hook偷梁换柱。
 
-相较于Hook方式，在插件数量较大的情况下，性能更好。
+Hook点是`Instrumentation.execStartActivity()`和`Instrumentation.newActivity()`方法，在这两步中进行Intent的改造。因此，使用了一个自定义的`Instrumentation`，并通过反射的方式替换了`ActivityThread`的`Instrumentation`。
 
-### 缺点
+### Service
 
-同Hook方式一样，对系统侵入性强。
+Hook了`ActivityManagerNative`中的单例`gDefault`。替换成了占位的Service。通过占位`Service`进行分发。
 
+### BroadcastReceiver
+
+静态转动态。
+
+### ContentProvider
+
+通过一个代理Provider进行分发。
+
+
+
+## RePlugin
+
+前面的步骤还是使用占位的Activity绕过AMS的检查，最后启动的过程，通过自定义一个ClassLoader，加载插件的class实现最终的替换。只进行了ClassLoader的hook，侵入性小。
+
+### Activity
+
+Activity在启动的时候替换成了合适的占坑的activity，然后ClassLoader.loadClass的时候根据占坑Activity到真正Activity的映射关系，输入占坑Activity，返回真正Activity 的类，避免了需要hook。
+
+### Service
+
+Service实现逻辑是这里其实是是直接在UI线程调用了service 的相关生命周期的方法，同时启动一个service来提高service所在进程优先级。
+
+### BroadcastReceiver
+
+BroadcastReceiver是把所有静态注册动态注册在一个代理Receiver，收到广播在代理Receiver进行分发。
+
+### ContentProvider
+
+ContentProvider这里使用的是代理Contentprovider，在对应的生命周期使用反射将对应类生成出来，然后调用对应的声明周期方法。

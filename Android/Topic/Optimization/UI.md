@@ -1,5 +1,11 @@
 # Optimization - UI
 
+## 卡顿优化
+
+使用Systrace工具等或者cpu Profiler，查看cherographer.onFrame()方法中耗时的操作是什么。
+
+
+
 ## OverDraw
 
 ### 检测方式
