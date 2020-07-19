@@ -10,3 +10,10 @@
 
 **ContentProvider Timeout** ：ContentProvider的publish在10s内没进行完。
 
+
+
+## Log
+
+从/data/anr/里获取anr详细log进行分析。
+
+手机root以后使用adb pull或者使用adb bugreport打包以后再pull。
