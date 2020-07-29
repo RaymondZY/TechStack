@@ -104,6 +104,19 @@ public class Lock{
 
 
 
+## happens-before
+
+* 程序顺序原则，即在一个线程内必须保证语义串行性，也就是说按照代码顺序执行。
+* 锁规则，解锁happens-before下一个加锁。
+* volatile规则，volatile变量的写happens-before读。
+* 线程启动规则，线程start操作happens-before线程内部操作。
+* 线程终止规则，线程内部操作happens-before线程结束。
+* 线程中断规则，线程中断方法（Thread.interrupt()）happens-before线程中断检测方法（Thread.interrupted()）。
+* 传递性。A happens-before B，B happens-before C，A happens-before C。
+* 对象终结规则，对象构造函数结束happends-before Object.finalize()方法。
+
+
+
 ## 死锁
 
 死锁产生的4个必要条件：
