@@ -452,3 +452,69 @@ Stream<T> takeWhile(bool Function(T element) test);
 Stream<T> where(bool Function(T event) test);
 ```
 
+
+
+## Mixin
+
+**Mixin**可以让一个类复用另一个类（或者不是**class**，而是**mixin**）的能力。
+
+**Mixin**的本质是创建了一个新的类，继承被mixin的类，并在相应的接口复用mixin提供的能力。
+
+### mixin顺序
+
+**mixin**的顺序会对结果产生影响。因为mixin的本质是新建一个类继承，所以后mixin的类会更优先产生效果。
+
+```dart
+class A {
+
+  String getName() => "A";
+}
+
+class B {
+
+  String getName() => "B";
+}
+
+class P {
+
+  String getName() => "P";
+}
+
+class AB extends P with A, B {}
+
+class BA extends P with B, A {}
+
+void main() {
+  var ab = AB();
+  assert(ab.getName() == "B");
+  assert(ab is P);
+  assert(ab is A);
+  assert(ab is B);
+
+  var ba = BA();
+  assert(ba.getName() == "A");
+  assert(ba is P);
+  assert(ba is A);
+  assert(ba is B);
+}
+```
+
+### Mixin on
+
+`mixin`和`on`关键字允许让**Mixin**限制被Mixin的类型，并且可以在`Mixin`中使用类中的属性。
+
+```dart
+class Person {
+
+  String name;
+
+  Person(this.name);
+}
+
+mixin Polite on Person {
+
+  void greet() {
+    print("hi, i am ${super.name}");
+  }
+}
+```
